@@ -46,7 +46,10 @@ export function NewNoteCard() {
                                 .
                             </p>
                         ) : (
-                            <p>Editor</p>
+                            <textarea
+                                autoFocus
+                                className="text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none"
+                            />
                         )}
                     </div>
 
