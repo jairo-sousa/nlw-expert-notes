@@ -1,6 +1,6 @@
 export function NoteCard() {
     return (
-        <div className="rounded-md bg-slate-800 p-5 space-y-3 overflow-hidden relative ">
+        <div className="rounded-md bg-slate-800 p-5 space-y-3 overflow-hidden relative hover:ring-2 hover:ring-slate-600">
             <span className="text-sm font-medium text-slate-300">
                 Há 2 dias
             </span>
