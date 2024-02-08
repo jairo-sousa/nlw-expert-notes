@@ -30,8 +30,12 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
 
     function handleSaveNote(event: FormEvent) {
         event.preventDefault();
-        onNoteCreated(content);
 
+        if (content == "") {
+            return;
+        }
+
+        onNoteCreated(content);
         toast.success("Nota criada com sucesso!");
 
         setContent("");
