@@ -49,28 +49,34 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
 
         if (!isSpeechRecognitionAPIAvaaliable) {
             toast.error("API de gravação não suportado pelo navegador");
-        } else {
-            setIsRecording(true);
-            // setShouldShowOnboarding(false);
-
-            const SpeechRecognitionAPI =
-                window.SpeechRecognition || window.webkitSpeechRecognition;
-
-            const SpeechRecognition = new SpeechRecognitionAPI();
-            SpeechRecognition.lang = "pt-BR";
-            SpeechRecognition.continuous = true;
-            SpeechRecognition.maxAlternatives = 1;
-            SpeechRecognition.interimResults = true;
-
-            SpeechRecognition.onresult = (event) => {
-                console.log(event.results);
-            };
-
-            SpeechRecognition.onerror = (event) => {
-                console.error(event);
-            };
-            SpeechRecognition.start();
         }
+
+        setIsRecording(true);
+        setShouldShowOnboarding(false);
+
+        const SpeechRecognitionAPI =
+            window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        const SpeechRecognition = new SpeechRecognitionAPI();
+        SpeechRecognition.lang = "pt-BR";
+        SpeechRecognition.continuous = true;
+        SpeechRecognition.maxAlternatives = 1;
+        SpeechRecognition.interimResults = true;
+
+        SpeechRecognition.onresult = (event) => {
+            const transcription = Array.from(event.results).reduce(
+                (text, result) => {
+                    return text.concat(result[0].transcript);
+                },
+                ""
+            );
+            setContent(transcription);
+        };
+
+        SpeechRecognition.onerror = (event) => {
+            console.error(event);
+        };
+        SpeechRecognition.start();
     }
     function handleStopRecording() {
         setIsRecording(false);
