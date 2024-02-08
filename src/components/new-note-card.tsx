@@ -43,8 +43,34 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
     }
 
     function handleStartRecording() {
-        setIsRecording(true);
-        // setShouldShowOnboarding(false);
+        const isSpeechRecognitionAPIAvaaliable =
+            "SpeechRecognition" in window ||
+            "webkitSpeechRecognition" in window;
+
+        if (!isSpeechRecognitionAPIAvaaliable) {
+            toast.error("API de gravação não suportado pelo navegador");
+        } else {
+            setIsRecording(true);
+            // setShouldShowOnboarding(false);
+
+            const SpeechRecognitionAPI =
+                window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            const SpeechRecognition = new SpeechRecognitionAPI();
+            SpeechRecognition.lang = "pt-BR";
+            SpeechRecognition.continuous = true;
+            SpeechRecognition.maxAlternatives = 1;
+            SpeechRecognition.interimResults = true;
+
+            SpeechRecognition.onresult = (event) => {
+                console.log(event.results);
+            };
+
+            SpeechRecognition.onerror = (event) => {
+                console.error(event);
+            };
+            SpeechRecognition.start();
+        }
     }
     function handleStopRecording() {
         setIsRecording(false);
