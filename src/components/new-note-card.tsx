@@ -16,6 +16,7 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
     }
 
     function handleEndEditor() {
+        setContent("");
         setShouldShowOnboarding(true);
     }
 
@@ -31,6 +32,9 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
         onNoteCreated(content);
 
         toast.success("Nota criada com sucesso!");
+
+        setContent("");
+        setShouldShowOnboarding(true);
     }
 
     return (
@@ -80,6 +84,7 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
                                     autoFocus
                                     className="text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none"
                                     onChange={handleContentChanged}
+                                    value={content}
                                 />
                             )}
                         </div>
