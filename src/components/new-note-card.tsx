@@ -7,6 +7,8 @@ interface NewNoteCardProps {
     onNoteCreated: (content: string) => void;
 }
 
+let speechRecognition: SpeechRecognition | null;
+
 export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
     const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true);
     const [isRecording, setIsRecording] = useState(false);
@@ -57,13 +59,13 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
         const SpeechRecognitionAPI =
             window.SpeechRecognition || window.webkitSpeechRecognition;
 
-        const SpeechRecognition = new SpeechRecognitionAPI();
-        SpeechRecognition.lang = "pt-BR";
-        SpeechRecognition.continuous = true;
-        SpeechRecognition.maxAlternatives = 1;
-        SpeechRecognition.interimResults = true;
+        speechRecognition = new SpeechRecognitionAPI();
+        speechRecognition.lang = "pt-BR";
+        speechRecognition.continuous = true;
+        speechRecognition.maxAlternatives = 1;
+        speechRecognition.interimResults = true;
 
-        SpeechRecognition.onresult = (event) => {
+        speechRecognition.onresult = (event) => {
             const transcription = Array.from(event.results).reduce(
                 (text, result) => {
                     return text.concat(result[0].transcript);
@@ -73,13 +75,16 @@ export function NewNoteCard({ onNoteCreated }: NewNoteCardProps) {
             setContent(transcription);
         };
 
-        SpeechRecognition.onerror = (event) => {
+        speechRecognition.onerror = (event) => {
             console.error(event);
         };
-        SpeechRecognition.start();
+        speechRecognition.start();
     }
     function handleStopRecording() {
         setIsRecording(false);
+        if (speechRecognition != null) {
+            speechRecognition.stop();
+        }
     }
 
     return (
